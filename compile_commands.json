@@ -1,0 +1,268 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/glad.c"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/glad.c",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/imgui/imgui.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/imgui/imgui.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/imgui/imgui_demo.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/imgui/imgui_demo.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/imgui/imgui_draw.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/imgui/imgui_draw.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/imgui/imgui_impl_glfw.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/imgui/imgui_impl_glfw.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/imgui/imgui_impl_opengl3.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/imgui/imgui_impl_opengl3.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/imgui/imgui_tables.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/imgui/imgui_tables.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/imgui/imgui_widgets.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/imgui/imgui_widgets.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/controller_window.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/controller_window.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/main.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/main.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/model.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/model.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/settings.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/settings.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/settings_window.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/settings_window.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  },
+  {
+    "arguments": [
+      "/usr/bin/g++",
+      "-c",
+      "-std=c++17",
+      "-g",
+      "-Wall",
+      "-I",
+      "include",
+      "-I",
+      "src/imgui",
+      "-o",
+      "3dco",
+      "src/shader.cpp"
+    ],
+    "directory": "/home/larf/Dev/3dco",
+    "file": "/home/larf/Dev/3dco/src/shader.cpp",
+    "output": "/home/larf/Dev/3dco/3dco"
+  }
+]

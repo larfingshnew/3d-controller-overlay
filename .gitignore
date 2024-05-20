@@ -1,0 +1,12 @@
+.cache/clangd/index/
+.vscode/
+settings/
+imgui.ini
+*.swp
+*.swo
+*.exe
+*.dSYM
+mac_prog
+3dco
+build.bat
+
