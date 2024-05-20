@@ -1,4 +1,4 @@
-# 3D Controller Overlay by Larf
+# 3D Controller Overlay
 
 3D Controller Overlay is a simple program for content creaters to show what their controller is doing in 3D space without the need for a handcam.
 
