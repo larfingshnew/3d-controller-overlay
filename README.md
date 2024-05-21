@@ -3,20 +3,19 @@
 3D Controller Overlay is a simple program for content creaters to show what their controller is doing in 3D space without the need for a handcam.
 
 How to Compile:
-- Download this repository or clone it using git.
+- Download and extract this repository or clone it using git.
 
 Windows:
 - If you want to compile using my batch file you need to have command line access to the gcc/g++ compiler. I use MinGW, you can download it from https://winlibs.com/ extract it somewhere then add the path to the bin folder inside mingw32 (eg. C:\mingw32\bin) to your PATH in Environment Variables. 
 - Run windows_build.bat
 
 Linux: (Debian based, Ubuntu, Mint, etc.) 
-- If you want to use my install scripts you will need bear (it just updates the compile_commands.json each time it builds)
-    sudo apt-get install bear
+- If you want to use my install scripts you will need bear (it just updates the compile_commands.json each time it builds)\
+    sudo apt-get install bear\
     Or, you can just take bear out of the install script.
 
-- You will need to install glfw3 and sdl2 (unless you get libraries and link them yourself)
-    sudo apt-get install libsdl2-dev
-    sudo apt-get install glfw3
+- You will need to install glfw3 and sdl2 (unless you get libraries and link them yourself)\
+    sudo apt-get install libsdl2-dev glfw3
 
 - chmod +x linux_build.sh (if needed)
 
