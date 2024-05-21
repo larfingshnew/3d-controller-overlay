@@ -12,7 +12,7 @@ Windows:
 Linux: (Debian based, Ubuntu, Mint, etc.) 
 - If you want to use my install scripts you will need bear (it just updates the compile_commands.json each time it builds)\
     sudo apt-get install bear\
-    Or, you can just take bear out of the install script.
+    Or, you can just take bear out of the build script.
 
 - You will need to install glfw3 and sdl2 (unless you get libraries and link them yourself)\
     sudo apt-get install libsdl2-dev glfw3
@@ -21,7 +21,7 @@ Linux: (Debian based, Ubuntu, Mint, etc.)
 
 - ./linux_build
 
-Linux: (Arch based, Manjaro, SteamOS etc.)
+Linux: (Arch based, Manjaro, SteamOS, etc.)
 - All the same things for ubuntu but using Pacman or some package installer like yay or yum. Hopefully if you're using arch based linux you already kinda know what you're doing.
 
 Mac:
