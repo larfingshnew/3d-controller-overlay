@@ -17,7 +17,7 @@ Linux: (Debian based, Ubuntu, Mint, etc.)
 - You will need to install glfw3 and sdl2 (unless you get libraries and link them yourself)\
     sudo apt-get install libsdl2-dev glfw3
 
-- chmod +x linux_build.sh (if needed)
+- chmod +x linux_build.sh
 
 - ./linux_build
 
