@@ -10,7 +10,7 @@ Windows:
 - Run windows_build.bat
 
 Linux: (Debian based, Ubuntu, Mint, etc.) 
-- If you want to use my install scripts you will need bear (it just updates the compile_commands.json each time it builds)\
+- If you want to use my build script you will need bear (it just updates the compile_commands.json each time it builds)\
     sudo apt-get install bear\
     Or, you can just take bear out of the build script.
 
