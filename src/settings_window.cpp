@@ -1287,7 +1287,6 @@ void drawSettingsWindow(){
 						open_ofstream(path);
 						//char* mapping = SDL_GameControllerMapping(getControllerWindow(tabs[selected_tab].ID)->sdl_controller);
 						std::string mapping = "";
-						mapping.append(",");
 						for(int i = 0; i < 27; i++){
 							if (current_mapping[i] != ""){
 								mapping.append(mapping_names[i]);
