@@ -68,7 +68,8 @@ void createControllerWindow(std::string title, std::string model_path){
 	//glfwSetFramebufferSizeCallback(w.glfw_window, controller_framebuffer_size_callback);
 	//glfwSetWindowSizeCallback(w.glfw_window, controller_window_size_callback);
 	glfwSetScrollCallback(w.glfw_window, controller_window_scroll_callback);
-	
+	//glfwSetWindowIconifyCallback(w.glfw_window, controller_window_iconify_callback);
+
 	//GLFWmonitor* primary_monitor = glfwGetPrimaryMonitor();
 	//const GLFWvidmode* vid_mode = glfwGetVideoMode(primary_monitor);
 	//w.frame_cap = vid_mode->refreshRate;
@@ -193,6 +194,14 @@ void controller_window_scroll_callback(GLFWwindow* window, double xoffset, doubl
 			break;
 		}
 	}
+}
+
+void controller_window_iconify_callback(GLFWwindow* window, int iconified){
+	if (iconified){
+        std::cout << "the controller window has been iconified" << std::endl;
+    }else{
+        std::cout << "the controller window has been restored" << std::endl;
+    }
 }
 
 controller_window* getLastWindow(){
@@ -567,149 +576,153 @@ void update_camera(controller_window &w, GLuint &shader, int window_width, int w
 
 void drawControllerWindows(){
 	for(controller_window &w : windows){
-		glfwMakeContextCurrent(w.glfw_window);
-		glfwSwapInterval(w.swap_interval);
+		if(!glfwGetWindowAttrib(w.glfw_window, GLFW_ICONIFIED)){
+			glfwMakeContextCurrent(w.glfw_window);
+			glfwSwapInterval(w.swap_interval);
 
-		w.deltaTime = glfwGetTime() - w.lastTime;
-		w.lastTime = glfwGetTime();
+			w.deltaTime = glfwGetTime() - w.lastTime;
+			w.lastTime = glfwGetTime();
 
-		int width = 0;
-		int height = 0;
-		glfwGetWindowSize(w.glfw_window, &width, &height);
-		glViewport(0, 0, width, height);
-		
-		update_camera(w, w.shader, width, height);
-		update_camera(w, w.light_source_shader, width, height);
-		update_camera(w, w.grid_shader, width, height);
-		
-		glEnable(GL_DEPTH_TEST);
-    	//glDisable(GL_CULL_FACE);
-		//glEnable(GL_BLEND);
-    	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		if(w.wireframe)
-			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		else
-			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+			int width = 0;
+			int height = 0;
+			glfwGetWindowSize(w.glfw_window, &width, &height);
+			glViewport(0, 0, width, height);
+			//std::cout << "width = " << width << std::endl;
+			//std::cout << "height = " << height << std::endl;
+			
+			update_camera(w, w.shader, width, height);
+			update_camera(w, w.light_source_shader, width, height);
+			update_camera(w, w.grid_shader, width, height);
+			
+			glEnable(GL_DEPTH_TEST);
+			//glDisable(GL_CULL_FACE);
+			//glEnable(GL_BLEND);
+			//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+			if(w.wireframe)
+				glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+			else
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		glClearColor(w.bg_color[0] * w.bg_color[3], 
-					 w.bg_color[1] * w.bg_color[3], 
-					 w.bg_color[2] * w.bg_color[3], 
-					 1.0f * w.bg_color[3]);
-    	
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
-		//Draw the Grid
-		if (w.grid){
-			glBindVertexArray(w.grid_vao);
-			glUseProgram(w.grid_shader);	
-			glEnableVertexAttribArray(0);
-			glm::mat4 grid_model = glm::mat4(1.0f);
-			grid_model = glm::translate(grid_model, glm::vec3(-50.0f, 0.0f, -50.0f));
-			grid_model = glm::scale(grid_model, glm::vec3(100.0f, 0.0f, 100.0f));
-			shaderUniformMat4(w.grid_shader, "model", grid_model);
-			glDrawElements(GL_LINES, w.grid_length, GL_UNSIGNED_INT, NULL);
-		}
-
-		glBindVertexArray(w.lighting_vao);
-		
-		glUseProgram(w.light_source_shader);
-		
-		//Draw Point Light Source
-		for(point_light p : w.point_lights){
-			if(!p.hide){
-				shaderUniformVec3(w.light_source_shader, "lightColor", glm::vec3(p.color[0], p.color[1], p.color[2]));
-				glm::mat4 light_source_model = glm::mat4(1.0f);
-				light_source_model = glm::translate(light_source_model, p.position); 
-				light_source_model = glm::scale(light_source_model, glm::vec3(0.2f)); 
-				shaderUniformMat4(w.light_source_shader, "model", light_source_model);	
-				glDrawArrays(GL_TRIANGLES, 0, 36);
+			glClearColor(w.bg_color[0] * w.bg_color[3], 
+						w.bg_color[1] * w.bg_color[3], 
+						w.bg_color[2] * w.bg_color[3], 
+						1.0f * w.bg_color[3]);
+			
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			
+			//Draw the Grid
+			if (w.grid){
+				glBindVertexArray(w.grid_vao);
+				glUseProgram(w.grid_shader);	
+				glEnableVertexAttribArray(0);
+				glm::mat4 grid_model = glm::mat4(1.0f);
+				grid_model = glm::translate(grid_model, glm::vec3(-50.0f, 0.0f, -50.0f));
+				grid_model = glm::scale(grid_model, glm::vec3(100.0f, 0.0f, 100.0f));
+				shaderUniformMat4(w.grid_shader, "model", grid_model);
+				glDrawElements(GL_LINES, w.grid_length, GL_UNSIGNED_INT, NULL);
 			}
-		}
 
-		//Draw Spot Light Source
-		for(spot_light s : w.spot_lights){
-			if(!s.hide){
-				shaderUniformVec3(w.light_source_shader, "lightColor", glm::vec3(s.color[0], s.color[1], s.color[2]));
-				glm::mat4 light_source_model = glm::mat4(1.0f);
-				light_source_model = glm::translate(light_source_model, s.position); 
-				light_source_model = glm::rotate(light_source_model, glm::radians(s.pitch), glm::vec3(1.0f, 0.0f, 0.0f));
-				light_source_model = glm::rotate(light_source_model, glm::radians(s.yaw), glm::vec3(0.0f, 1.0f, 0.0f));
-				light_source_model = glm::scale(light_source_model, glm::vec3(0.1f, 0.1f, 0.3f)); 
-				shaderUniformMat4(w.light_source_shader, "model", light_source_model);	
-				glDrawArrays(GL_TRIANGLES, 0, 36);
+			glBindVertexArray(w.lighting_vao);
+			
+			glUseProgram(w.light_source_shader);
+			
+			//Draw Point Light Source
+			for(point_light p : w.point_lights){
+				if(!p.hide){
+					shaderUniformVec3(w.light_source_shader, "lightColor", glm::vec3(p.color[0], p.color[1], p.color[2]));
+					glm::mat4 light_source_model = glm::mat4(1.0f);
+					light_source_model = glm::translate(light_source_model, p.position); 
+					light_source_model = glm::scale(light_source_model, glm::vec3(0.2f)); 
+					shaderUniformMat4(w.light_source_shader, "model", light_source_model);	
+					glDrawArrays(GL_TRIANGLES, 0, 36);
+				}
 			}
-		}
 
-		//Draw Lighting Subject Cubes
-		glUseProgram(w.shader);
-		
-		if(w.freelook)
-			shaderUniformVec3(w.shader, "viewPos", w.freelook_position);
-		else
-			shaderUniformVec3(w.shader, "viewPos", w.camera_position);
+			//Draw Spot Light Source
+			for(spot_light s : w.spot_lights){
+				if(!s.hide){
+					shaderUniformVec3(w.light_source_shader, "lightColor", glm::vec3(s.color[0], s.color[1], s.color[2]));
+					glm::mat4 light_source_model = glm::mat4(1.0f);
+					light_source_model = glm::translate(light_source_model, s.position); 
+					light_source_model = glm::rotate(light_source_model, glm::radians(s.pitch), glm::vec3(1.0f, 0.0f, 0.0f));
+					light_source_model = glm::rotate(light_source_model, glm::radians(s.yaw), glm::vec3(0.0f, 1.0f, 0.0f));
+					light_source_model = glm::scale(light_source_model, glm::vec3(0.1f, 0.1f, 0.3f)); 
+					shaderUniformMat4(w.light_source_shader, "model", light_source_model);	
+					glDrawArrays(GL_TRIANGLES, 0, 36);
+				}
+			}
 
-		shaderUniformFloat(w.shader, "time", glfwGetTime());
+			//Draw Lighting Subject Cubes
+			glUseProgram(w.shader);
+			
+			if(w.freelook)
+				shaderUniformVec3(w.shader, "viewPos", w.freelook_position);
+			else
+				shaderUniformVec3(w.shader, "viewPos", w.camera_position);
 
-		//direct lights
-		shaderUniformInt(w.shader, "direct_lights", w.direct_lights.size());
-		for (unsigned i=0; i<w.direct_lights.size(); i++){
-			std::string name = "dirLights[";
-			name.append(std::to_string(i));
-			name.append("]");
-			shaderUniformVec3(w.shader, std::string(name).append(".direction").c_str(), w.direct_lights[i].direction);
-			shaderUniformVec3(w.shader, std::string(name).append(".ambient").c_str(), 
-			glm::vec3(w.direct_lights[i].color[0] * w.direct_lights[i].ambient,
-					  w.direct_lights[i].color[1] * w.direct_lights[i].ambient,
-					  w.direct_lights[i].color[2] * w.direct_lights[i].ambient));
-			shaderUniformVec3(w.shader, std::string(name).append(".diffuse").c_str(), 
-			glm::vec3(w.direct_lights[i].color[0] * w.direct_lights[i].diffuse,
-					  w.direct_lights[i].color[1] * w.direct_lights[i].diffuse,
-					  w.direct_lights[i].color[2] * w.direct_lights[i].diffuse));
-			shaderUniformVec3(w.shader, std::string(name).append(".specular").c_str(), 
-			glm::vec3(w.direct_lights[i].color[0] * w.direct_lights[i].specular,
-					  w.direct_lights[i].color[1] * w.direct_lights[i].specular,
-					  w.direct_lights[i].color[2] * w.direct_lights[i].specular));
-		}
+			shaderUniformFloat(w.shader, "time", glfwGetTime());
 
-		//point lights
-		shaderUniformInt(w.shader, "point_lights", w.point_lights.size());
-		for (unsigned i=0; i<w.point_lights.size(); i++){
-			std::string name = "pointLights[";
-			name.append(std::to_string(i));
-			name.append("]");
-			shaderUniformFloat(w.shader, std::string(name).append(".constant").c_str(),  w.point_lights[i].constant - w.point_lights[i].intensity);
-			shaderUniformFloat(w.shader, std::string(name).append(".linear").c_str(), 	 w.point_lights[i].linear);
-			shaderUniformFloat(w.shader, std::string(name).append(".quadratic").c_str(), w.point_lights[i].quadratic);	
-			shaderUniformVec3(w.shader,  std::string(name).append(".position").c_str(),  w.point_lights[i].position);
-			shaderUniformVec3(w.shader,  std::string(name).append(".ambient").c_str(),   w.point_lights[i].ambient);
-			shaderUniformVec3(w.shader,  std::string(name).append(".diffuse").c_str(),   w.point_lights[i].diffuse);
-			shaderUniformVec3(w.shader,  std::string(name).append(".specular").c_str(),  w.point_lights[i].specular);
+			//direct lights
+			shaderUniformInt(w.shader, "direct_lights", w.direct_lights.size());
+			for (unsigned i=0; i<w.direct_lights.size(); i++){
+				std::string name = "dirLights[";
+				name.append(std::to_string(i));
+				name.append("]");
+				shaderUniformVec3(w.shader, std::string(name).append(".direction").c_str(), w.direct_lights[i].direction);
+				shaderUniformVec3(w.shader, std::string(name).append(".ambient").c_str(), 
+				glm::vec3(w.direct_lights[i].color[0] * w.direct_lights[i].ambient,
+						w.direct_lights[i].color[1] * w.direct_lights[i].ambient,
+						w.direct_lights[i].color[2] * w.direct_lights[i].ambient));
+				shaderUniformVec3(w.shader, std::string(name).append(".diffuse").c_str(), 
+				glm::vec3(w.direct_lights[i].color[0] * w.direct_lights[i].diffuse,
+						w.direct_lights[i].color[1] * w.direct_lights[i].diffuse,
+						w.direct_lights[i].color[2] * w.direct_lights[i].diffuse));
+				shaderUniformVec3(w.shader, std::string(name).append(".specular").c_str(), 
+				glm::vec3(w.direct_lights[i].color[0] * w.direct_lights[i].specular,
+						w.direct_lights[i].color[1] * w.direct_lights[i].specular,
+						w.direct_lights[i].color[2] * w.direct_lights[i].specular));
+			}
+
+			//point lights
+			shaderUniformInt(w.shader, "point_lights", w.point_lights.size());
+			for (unsigned i=0; i<w.point_lights.size(); i++){
+				std::string name = "pointLights[";
+				name.append(std::to_string(i));
+				name.append("]");
+				shaderUniformFloat(w.shader, std::string(name).append(".constant").c_str(),  w.point_lights[i].constant - w.point_lights[i].intensity);
+				shaderUniformFloat(w.shader, std::string(name).append(".linear").c_str(), 	 w.point_lights[i].linear);
+				shaderUniformFloat(w.shader, std::string(name).append(".quadratic").c_str(), w.point_lights[i].quadratic);	
+				shaderUniformVec3(w.shader,  std::string(name).append(".position").c_str(),  w.point_lights[i].position);
+				shaderUniformVec3(w.shader,  std::string(name).append(".ambient").c_str(),   w.point_lights[i].ambient);
+				shaderUniformVec3(w.shader,  std::string(name).append(".diffuse").c_str(),   w.point_lights[i].diffuse);
+				shaderUniformVec3(w.shader,  std::string(name).append(".specular").c_str(),  w.point_lights[i].specular);
+			}
+			
+			//spot lights
+			shaderUniformInt(w.shader, "spot_lights", w.spot_lights.size());
+			for (unsigned i=0; i<w.spot_lights.size(); i++){
+				std::string name = "spotLights[";
+				name.append(std::to_string(i));
+				name.append("]");
+				shaderUniformVec3(w.shader,  std::string(name).append(".position").c_str(),     w.spot_lights[i].position);
+				shaderUniformVec3(w.shader,  std::string(name).append(".direction").c_str(),    w.spot_lights[i].direction);
+				shaderUniformFloat(w.shader, std::string(name).append(".cutoff").c_str(),       glm::cos(glm::radians(w.spot_lights[i].cutoff)));
+				shaderUniformFloat(w.shader, std::string(name).append(".outer_cutoff").c_str(), glm::cos(glm::radians(w.spot_lights[i].cutoff + (w.spot_lights[i].outer_cutoff * 0.2f))));
+				shaderUniformFloat(w.shader, std::string(name).append(".constant").c_str(),     w.spot_lights[i].constant - w.spot_lights[i].intensity);
+				shaderUniformFloat(w.shader, std::string(name).append(".linear").c_str(), 	    w.spot_lights[i].linear);
+				shaderUniformFloat(w.shader, std::string(name).append(".quadratic").c_str(),    w.spot_lights[i].quadratic);	
+				shaderUniformVec3(w.shader,  std::string(name).append(".ambient").c_str(),      w.spot_lights[i].ambient);
+				shaderUniformVec3(w.shader,  std::string(name).append(".diffuse").c_str(),      w.spot_lights[i].diffuse);
+				shaderUniformVec3(w.shader,  std::string(name).append(".specular").c_str(),     w.spot_lights[i].specular);
+			}
+			
+			w.model.motion_matrix = w.gyro_matrix;
+			
+			drawModel(w.model, w.shader);
+			
+			glUseProgram(0);
+			
+			glfwSwapBuffers(w.glfw_window);
 		}
-		
-		//spot lights
-		shaderUniformInt(w.shader, "spot_lights", w.spot_lights.size());
-		for (unsigned i=0; i<w.spot_lights.size(); i++){
-			std::string name = "spotLights[";
-			name.append(std::to_string(i));
-			name.append("]");
-			shaderUniformVec3(w.shader,  std::string(name).append(".position").c_str(),     w.spot_lights[i].position);
-			shaderUniformVec3(w.shader,  std::string(name).append(".direction").c_str(),    w.spot_lights[i].direction);
-			shaderUniformFloat(w.shader, std::string(name).append(".cutoff").c_str(),       glm::cos(glm::radians(w.spot_lights[i].cutoff)));
-			shaderUniformFloat(w.shader, std::string(name).append(".outer_cutoff").c_str(), glm::cos(glm::radians(w.spot_lights[i].cutoff + (w.spot_lights[i].outer_cutoff * 0.2f))));
-			shaderUniformFloat(w.shader, std::string(name).append(".constant").c_str(),     w.spot_lights[i].constant - w.spot_lights[i].intensity);
-			shaderUniformFloat(w.shader, std::string(name).append(".linear").c_str(), 	    w.spot_lights[i].linear);
-			shaderUniformFloat(w.shader, std::string(name).append(".quadratic").c_str(),    w.spot_lights[i].quadratic);	
-			shaderUniformVec3(w.shader,  std::string(name).append(".ambient").c_str(),      w.spot_lights[i].ambient);
-			shaderUniformVec3(w.shader,  std::string(name).append(".diffuse").c_str(),      w.spot_lights[i].diffuse);
-			shaderUniformVec3(w.shader,  std::string(name).append(".specular").c_str(),     w.spot_lights[i].specular);
-		}
-		
-		w.model.motion_matrix = w.gyro_matrix;
-		
-		drawModel(w.model, w.shader);
-		
-		glUseProgram(0);
-		
-		glfwSwapBuffers(w.glfw_window);
 	}
 }

@@ -82,6 +82,7 @@ typedef struct controller_window_struct{
 	bool wireframe = false;
 	Uint8 frame_cap = 60;
 	float bg_color[4] = {0.2f, 0.3f, 0.3f, 1.0f};
+	float highlight_color[3] = {0.0f, 1.0f, 0.0f};
 	bool freelook = false;
 
 	double deltaTime = 0.0f;
@@ -171,6 +172,8 @@ void controller_framebuffer_size_callback(GLFWwindow* window, int width, int hei
 void controller_window_size_callback(GLFWwindow* window, int width, int height);
 
 void controller_window_scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+
+void controller_window_iconify_callback(GLFWwindow* window, int iconified);
 
 #endif
 

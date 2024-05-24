@@ -534,6 +534,14 @@ void drawSettingsWindow(){
 				ImGui::NewLine();
 				ImGui::SliderInt("L-Stick Highlight Deadzone", &current_window->model.meshes[7].ring_highlight_deadzone, 0, 100);
 				ImGui::SliderInt("R-Stick Highlight Deadzone", &current_window->model.meshes[8].ring_highlight_deadzone, 0, 100);
+				ImGui::ColorEdit3("Hightlight Color", current_window->highlight_color);
+				for(int i = 3; i<32; i++){
+					if(i != 5 && i != 6){
+						current_window->model.meshes[i].material.highlight[0] = current_window->highlight_color[0];
+						current_window->model.meshes[i].material.highlight[1] = current_window->highlight_color[1];
+						current_window->model.meshes[i].material.highlight[2] = current_window->highlight_color[2];
+					}
+				}
 				ImGui::TreePop();
 			}
 			if(ImGui::TreeNode("Materials")){
@@ -553,9 +561,11 @@ void drawSettingsWindow(){
 				ImGui::SliderFloat("Specular", &current_window->model.meshes[material_mesh].material.specular, 0, 1);
 				ImGui::SliderFloat("Shininess", &current_window->model.meshes[material_mesh].material.shininess, 1, 256);
 				ImGui::ColorEdit3("Color", current_window->model.meshes[material_mesh].material.color);
+				/*
 				if(material_mesh > 2 && material_mesh != 5 && material_mesh != 6){
 					ImGui::ColorEdit3("Highlight", current_window->model.meshes[material_mesh].material.highlight);
 				}
+				//*/
 				ImGui::TreePop();
 			}
 			if(ImGui::TreeNode("Textures")){
@@ -1442,14 +1452,18 @@ void saveTabs(){
 		write_int(std::string("scroll to resize"), getControllerWindow(t.ID)->scroll_to_resize);
 		write_int(std::string("show grid"), getControllerWindow(t.ID)->grid);
 		write_int(std::string("wireframe"), getControllerWindow(t.ID)->wireframe);
-		int w = 0;
-		int h = 0;
-		glfwGetWindowSize(getControllerWindow(t.ID)->glfw_window, &w, &h);
+		int w = 640;
+		int h = 480;
+		if(!glfwGetWindowAttrib(getControllerWindow(t.ID)->glfw_window, GLFW_ICONIFIED)){
+			glfwGetWindowSize(getControllerWindow(t.ID)->glfw_window, &w, &h);
+		}
 		write_int(std::string("width"), w);
 		write_int(std::string("height"), h);
-		int x = 0;
-		int y = 0;
-		glfwGetWindowPos(getControllerWindow(t.ID)->glfw_window, &x, &y);
+		int x = 100;
+		int y = 100;
+		if(!glfwGetWindowAttrib(getControllerWindow(t.ID)->glfw_window, GLFW_ICONIFIED)){
+			glfwGetWindowPos(getControllerWindow(t.ID)->glfw_window, &x, &y);
+		}
 		write_int(std::string("x pos"), x);
 		write_int(std::string("y pos"), y);
 		write_int(std::string("swap interval"), getControllerWindow(t.ID)->swap_interval);
@@ -1477,6 +1491,9 @@ void saveTabs(){
 		write_int(std::string("popup paddles"), getControllerWindow(t.ID)->model.popup_paddles);
 		write_int(std::string("left stick highlight deadzone"), getControllerWindow(t.ID)->model.meshes[7].ring_highlight_deadzone);
 		write_int(std::string("right stick highlight deadzone"), getControllerWindow(t.ID)->model.meshes[8].ring_highlight_deadzone);
+		write_float(std::string("highlight red"), getControllerWindow(t.ID)->highlight_color[0]);
+		write_float(std::string("highlight green"), getControllerWindow(t.ID)->highlight_color[1]);
+		write_float(std::string("highlight blue"), getControllerWindow(t.ID)->highlight_color[2]);
 		//Materials
 		write_int(std::string("model meshes"), getControllerWindow(t.ID)->model.meshes.size());
 		write_line(std::string("materials"));
@@ -1663,6 +1680,19 @@ void loadTabs(){
 				getControllerWindow(tabs.back().ID)->model.meshes[7].ring_highlight_deadzone = std::stoi(lines[line_index + 1]);
 			if (line == "right stick highlight deadzone")
 				getControllerWindow(tabs.back().ID)->model.meshes[8].ring_highlight_deadzone = std::stoi(lines[line_index + 1]);
+			if (line == "highlight red")
+				getControllerWindow(tabs.back().ID)->highlight_color[0] = std::stof(lines[line_index + 1]);
+			if (line == "highlight green")
+				getControllerWindow(tabs.back().ID)->highlight_color[1] = std::stof(lines[line_index + 1]);
+			if (line == "highlight blue")
+				getControllerWindow(tabs.back().ID)->highlight_color[2] = std::stof(lines[line_index + 1]);
+			for(int i = 3; i<32; i++){
+				if(i != 5 && i != 6){
+					getControllerWindow(tabs.back().ID)->model.meshes[i].material.highlight[0] = getControllerWindow(tabs.back().ID)->highlight_color[0];
+					getControllerWindow(tabs.back().ID)->model.meshes[i].material.highlight[1] = getControllerWindow(tabs.back().ID)->highlight_color[1];
+					getControllerWindow(tabs.back().ID)->model.meshes[i].material.highlight[2] = getControllerWindow(tabs.back().ID)->highlight_color[2];
+				}
+			}	
 			//Materials
 			if (line == "materials"){
 				for(int i=0; i<(int)getControllerWindow(tabs.back().ID)->model.meshes.size(); i++){
