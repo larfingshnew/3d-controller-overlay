@@ -48,13 +48,17 @@ std::vector<controller_window> windows;
 
 void createControllerWindow(std::string title, std::string model_path){
     controller_window w;
-	
-	w.glfw_window = glfwCreateWindow(defaultWidth, defaultHeight, title.c_str(), NULL, NULL);
+
+    // Set number of samples for multi-sampling
+    glfwWindowHint(GLFW_SAMPLES, 4);
+    w.glfw_window = glfwCreateWindow(defaultWidth, defaultHeight, title.c_str(), NULL, NULL);
     if (w.glfw_window == NULL){
         std::cout << "Failed to create controller indow" << std::endl;
         glfwTerminate();
     }
     glfwMakeContextCurrent(w.glfw_window);
+    // Enable multi-sampling
+    glEnable(GL_MULTISAMPLE);
 
 	GLFWimage images[1]; 
 	images[0].pixels = stbi_load("icon.png", &images[0].width, &images[0].height, 0, 4);
